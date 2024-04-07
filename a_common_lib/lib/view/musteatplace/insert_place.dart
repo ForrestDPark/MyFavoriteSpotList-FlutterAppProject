@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,6 +45,7 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
   late TextEditingController latController;
   late TextEditingController lngController;
   late TextEditingController estimateController;
+  late bool addclicked;
 
   ImagePicker picker = ImagePicker();
   XFile? imageFile;
@@ -50,6 +53,8 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
   @override
   void initState() {
     super.initState();
+
+    addclicked =false;
     handler = DatabaseHandler();
 
     // seq = 1; -> auto increase
@@ -72,7 +77,7 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '맛집 추가',
+          '장소 추가',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
         ),
       ),
@@ -80,44 +85,73 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            imageFile== null
-            ?const Text("Image is not selected")
-            : Image.file(File(imageFile!.path)),
+            Positioned(
+              top: 3,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: imageFile == null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: Image.asset('images/pocketmon/noimage.gif'))
+                    : Image.file(File(imageFile!.path)),
+              ),
+            ),
+
             // 사진 정보 입력
-            TextButton(
-              onPressed: (){
-                //사진 받아오는 함수 호출
-                getImageFileFromGallery(ImageSource.gallery);
-              }, 
-              child: const Text('사진추가하기')),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.amber,
+                      shape: RoundedRectangleBorder()),
+                  onPressed: () {
+                    //사진 받아오는 함수 호출
+                    getImageFileFromGallery(ImageSource.gallery);
+                    addclicked =true;
+                  },
+                  child: const Text(
+                    '사진추가하기',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+            ),
 
             // 위치 정보 입력
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
-                  "   위치 :   ",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "   위치 : ",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
-                  width: 100,
-                  height: 40,
-                  child: TextField(
-                    controller: latController,
-                    decoration: const InputDecoration(
-                        labelText: '경도', border: OutlineInputBorder()),
+                  width: 120,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: latController,
+                      decoration: const InputDecoration(
+                          labelText: '경도', border: OutlineInputBorder()),
+                    ),
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 SizedBox(
-                  width: 100,
-                  height: 40,
-                  child: TextField(
-                    controller: lngController,
-                    decoration: const InputDecoration(
-                        labelText: '위도', border: OutlineInputBorder()),
+                  width: 120,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: lngController,
+                      decoration: const InputDecoration(
+                          labelText: '위도', border: OutlineInputBorder()),
+                    ),
                   ),
                 ),
               ],
@@ -126,17 +160,23 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
             // 이름 입력
             Row(
               children: [
-                const Text(
-                  "   이름 :   ",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "   장소 : ",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: '이름를 입력하세요'),
+                  width: 250,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: '이름를 입력하세요'),
+                    ),
                   ),
                 ),
               ],
@@ -144,18 +184,23 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
             // 전화번호 입력
             Row(
               children: [
-                const Text(
-                  "   전화 :  ",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "   전화 : ",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
-                  width: 200,
-                  height: 40,
-                  child: TextField(
-                    controller: phoneController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: '번호를 입력하세요'),
+                  width: 250,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: phoneController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: '번호를 입력하세요'),
+                    ),
                   ),
                 ),
               ],
@@ -166,19 +211,26 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
             // 평가 입력
             Row(
               children: [
-                const Text(
-                  "  평가 :   ",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Text(
+                    "  평가 : ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
-                  width: 250,
-                  child: TextField(
-                    //expands: true,
-                    maxLength: 200,
-                    controller: estimateController,
-                    decoration: const InputDecoration(
-                        labelText: '평가를 입력하세요', border: OutlineInputBorder()),
+                  width: 260,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      maxLines: 5,
+                      //expands: true,
+                      maxLength: 200,
+                      controller: estimateController,
+                      decoration: const InputDecoration(
+                          labelText: '평가를 입력하세요', border: OutlineInputBorder()),
+                    ),
                   ),
                 ),
               ],
@@ -192,7 +244,6 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
                   lng = double.parse(lngController.text.trim().toString());
                   phone = phoneController.text.toString();
                   estimate = estimateController.text.toString();
-                  
 
                   MustEatPlaces musteatplace = MustEatPlaces(
                       // seq: seq,
@@ -201,7 +252,9 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
                       lng: lng,
                       phone: phone,
                       estimate: estimate,
-                      image : await imageFile!.readAsBytes(),
+                      image: addclicked
+                          ? await imageFile!.readAsBytes()
+                          : await getImageBytes('images/pocketmon/noimage.gif'),
                       initdate: initdate);
 
                   int returnValue =
@@ -237,14 +290,21 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
               child: const Text('OK'))
         ]);
   }
-  getImageFileFromGallery(imageSource_gallery) async{
-    final XFile? pickedImageFile = await picker.pickImage(source: imageSource_gallery);
-    if(pickedImageFile !=null){
-      imageFile =XFile(pickedImageFile.path);
-    }else{
-      imageFile =null;
+
+  getImageFileFromGallery(imageSource_gallery) async {
+    final XFile? pickedImageFile =
+        await picker.pickImage(source: imageSource_gallery);
+    if (pickedImageFile != null) {
+      imageFile = XFile(pickedImageFile.path);
+    } else {
+      imageFile = null;
     }
-    setState((){});
+    setState(() {});
   }
-  
+
+  // 이미지 파일을 Uint8List로 변환하는 함수
+  Future<Uint8List> getImageBytes(String imagePath) async {
+    ByteData imageByteData = await rootBundle.load(imagePath);
+    return imageByteData.buffer.asUint8List();
+  }
 } //End

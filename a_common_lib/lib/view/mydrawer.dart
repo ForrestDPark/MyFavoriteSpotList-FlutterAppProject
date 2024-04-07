@@ -71,30 +71,30 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           ListTile(
             leading: Icon(
-              Icons.question_answer,
+              Icons.tour  ,
               color: Colors.red,
             ),
-            title: Text("삼국지 영웅"),
+            title: Text("추천 관광명소"),
             onTap: () {
               Get.to(const MyHeros());
             },
           ),
           ListTile(
             leading: Icon(
-              Icons.email_rounded,
+              Icons.turned_in_not_rounded,
               color: Colors.blue,
             ),
-            title: Text("FlowerGarden "),
+            title: Text("추천 맛집 "),
             onTap: () {
               Get.to(const MyFlower());
             },
           ),
           ListTile(
             leading: Icon(
-              Icons.email_outlined,
+              Icons.logout,
               color: Colors.red,
             ),
-            title: Text("Bulb"),
+            title: Text("로그아웃"),
             onTap: () {
             },
           ),

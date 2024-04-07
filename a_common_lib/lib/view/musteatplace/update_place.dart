@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +19,7 @@ import '../../vm/musteatplace_db_handler.dart';
   Updates     : 
     2024.04.07 Sun
       - update test (without image data) 
-      - image 수정 추가 
+      - image 수정 추가  -> 사진 수정이 안되고 있음... 
   Detail      : 
     
 
@@ -31,7 +32,11 @@ class UpdateMustEatPlace extends StatefulWidget {
 }
 
 class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
+  // Properties
+  late bool editclicked;
   late DatabaseHandler handler;
+
+  // Model parameter
   late int? seq;
   late String name;
   late String phone;
@@ -40,12 +45,14 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
   late String? estimate;
   late Uint8List image;
 
+  // Scrren controller
   late TextEditingController nameController;
   late TextEditingController phoneController;
   late TextEditingController latController;
   late TextEditingController lngController;
   late TextEditingController estimateController;
 
+  //Image
   ImagePicker picker = ImagePicker();
   XFile? imageFile;
 
@@ -54,6 +61,7 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
   @override
   void initState() {
     super.initState();
+    editclicked = false;
     handler = DatabaseHandler();
     print("value0 : ${_mustEatPlaces.seq}");
     seq = _mustEatPlaces.seq;
@@ -93,7 +101,7 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     ? ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         child: Image.memory(image))
-                    : Image.file(File(imageFile!.path)),
+                    : Image.file(File(imageFile!.path))
               ),
             ),
 
@@ -107,14 +115,13 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                 ),
                 onPressed: () {
                   //사진 받아오는 함수 호출
+                  editclicked =true;
                   getImageFileFromGallery(ImageSource.gallery);
                 },
                 child: const Text(
                   '사진수정하기',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54
-                  ),
+                      fontWeight: FontWeight.bold, color: Colors.black54),
                 )),
             SizedBox(
               height: 20,
@@ -130,7 +137,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     padding: const EdgeInsets.all(8.0),
                     child: const Text(
                       "Location :",
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -139,10 +147,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     child: TextField(
                       controller: latController,
                       decoration: const InputDecoration(
-                          labelText: 'latitiude', 
-                          labelStyle: TextStyle(
-                            fontStyle: FontStyle.normal
-                          ),
+                          labelText: 'latitiude',
+                          labelStyle: TextStyle(fontStyle: FontStyle.normal),
                           border: OutlineInputBorder()),
                     ),
                   ),
@@ -155,10 +161,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     child: TextField(
                       controller: lngController,
                       decoration: const InputDecoration(
-                          labelText: 'longitude', 
-                          labelStyle: TextStyle(
-                            fontStyle: FontStyle.normal
-                          ),
+                          labelText: 'longitude',
+                          labelStyle: TextStyle(fontStyle: FontStyle.normal),
                           border: OutlineInputBorder()),
                     ),
                   ),
@@ -175,7 +179,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     padding: const EdgeInsets.all(8.0),
                     child: const Text(
                       "Place :     ",
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -185,11 +190,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                       controller: nameController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                           labelText: 'Enter the spot name',
-                           labelStyle: TextStyle(
-                            fontStyle: FontStyle.normal
-                          )
-                           ),
+                          labelText: 'Enter the spot name',
+                          labelStyle: TextStyle(fontStyle: FontStyle.normal)),
                     ),
                   ),
                 ],
@@ -204,7 +206,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     padding: const EdgeInsets.all(8.0),
                     child: const Text(
                       "Tel :          ",
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
@@ -213,12 +216,9 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     child: TextField(
                       controller: phoneController,
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(), 
+                          border: OutlineInputBorder(),
                           labelText: 'Enter Tell number',
-                          labelStyle: TextStyle(
-                            fontStyle: FontStyle.normal
-                          )
-                          ),
+                          labelStyle: TextStyle(fontStyle: FontStyle.normal)),
                     ),
                   ),
                 ],
@@ -242,7 +242,8 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     maxLength: 200,
                     controller: estimateController,
                     decoration: const InputDecoration(
-                        labelText: 'Enter your review', border: OutlineInputBorder()),
+                        labelText: 'Enter your review',
+                        border: OutlineInputBorder()),
                   ),
                 ),
               ],
@@ -264,11 +265,15 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
                     lng: lng,
                     phone: phone,
                     estimate: estimate,
-                    image: await imageFile!.readAsBytes(),
+                    image: editclicked
+                        ? await imageFile!.readAsBytes()
+                        : await imageFile!.readAsBytes(),
                   );
 
                   var returnValue =
                       await handler.updateMustEatPlaces(musteatplace);
+                  print("11:"
+                    "$editclicked");
                   //print("입력결과 : $returnValue");
                   _showDialog();
                   // if(returnValue != 1){
@@ -296,6 +301,7 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
               onPressed: () {
                 Get.back();
                 Get.back();
+                print(editclicked);
               },
               child: const Text('OK'))
         ]);
@@ -306,9 +312,17 @@ class _UpdateMustEatPlaceState extends State<UpdateMustEatPlace> {
         await picker.pickImage(source: imageSource_gallery);
     if (pickedImageFile != null) {
       imageFile = XFile(pickedImageFile.path);
+      //image = await pickedImageFile.readAsBytes();
+
     } else {
       imageFile = null;
     }
     setState(() {});
+  }
+
+    // 이미지 파일을 Uint8List로 변환하는 함수
+  Future<Uint8List> getImageBytes(String imagePath) async {
+    ByteData imageByteData = await rootBundle.load(imagePath);
+        return imageByteData.buffer.asUint8List();
   }
 } //End

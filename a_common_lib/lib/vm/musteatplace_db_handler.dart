@@ -60,8 +60,8 @@ class DatabaseHandler {
     
     // Query return : map
     final List<Map<String, Object?>> queryResults = await db.rawQuery(selectQuery); 
-    print('select query : $selectQuery');
-    print(queryResults);
+    //print('select query : $selectQuery');
+    //print(queryResults);
     // Convert Map => List 
     return queryResults.map(
       (e) => MustEatPlaces.fromMap(e)).toList(); 
@@ -124,10 +124,10 @@ class DatabaseHandler {
           ]);
   }
 
-  deleteMustEatPlaces(String code) async {
+  deleteMustEatPlaces(int seq) async {
     // int result = 0;
-    String deleteQuery ='delete from $dbName where code =?';
+    String deleteQuery ='delete from $dbName where seq =?';
     final Database db = await initializeDB();
-    await db.rawUpdate(deleteQuery, [code]);
+    await db.rawUpdate(deleteQuery, [seq]);
   }
 }
