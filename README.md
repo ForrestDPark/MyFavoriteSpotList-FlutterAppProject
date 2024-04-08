@@ -1,13 +1,17 @@
 # FavoriteSpotList
 My Favorite Spot List 
 
+2024.04.08 morning
+
+
+
+
 
 2024.04.08
 Future works 
 - 내가 지정한 장소와 현재장소 간 거리 계산하여 보여주는 기능
 - DB 에서 이미지 업데이트가 안되는 문제 해결
 - firebase, web server 를 활용하여 앱 만들기 
-
 
 <img width="376" alt="image" src="https://github.com/ForrestDPark/FavoriteSpotList/assets/149550771/13032182-629a-4fbc-81cf-f0ab05aa1c23"> <br>
 <img width="375" alt="image" src="https://github.com/ForrestDPark/FavoriteSpotList/assets/149550771/71ff2213-e6ec-4c9c-a3fc-bdeea8243bf2"> <br>
