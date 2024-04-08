@@ -107,7 +107,8 @@ class DatabaseHandler {
       phone=?, 
       lat=?, 
       lng=?, 
-      estimate=? 
+      image =?, 
+      estimate=?
       where seq =?
       ''';
 
@@ -118,7 +119,7 @@ class DatabaseHandler {
           musteatplace.phone, 
           musteatplace.lat, 
           musteatplace.lng,
-          // musteatplace.image,
+          musteatplace.image,
           musteatplace.estimate,
           musteatplace.seq,
           ]);

@@ -49,6 +49,7 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
 
   ImagePicker picker = ImagePicker();
   XFile? imageFile;
+  List loc_data = Get.arguments ?? [0.0,0.0]; 
 
   @override
   void initState() {
@@ -67,8 +68,8 @@ class _InsertMustEatPlaceState extends State<InsertMustEatPlace> {
 
     nameController = TextEditingController();
     phoneController = TextEditingController();
-    latController = TextEditingController();
-    lngController = TextEditingController();
+    latController = TextEditingController(text: loc_data[0]);
+    lngController = TextEditingController(text :loc_data[1]);
     estimateController = TextEditingController();
   }
 
