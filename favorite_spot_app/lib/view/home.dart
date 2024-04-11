@@ -14,6 +14,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:keyboard_enter_app/view/firebasecrud/insertfirebase.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
 import 'drawer/mydrawer.dart';
@@ -148,7 +149,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 onPressed: () {
                   // Add MustEatPlace
                   Get.to(
-                    InsertMustEatPlace(), 
+                    InsertFirebase(), 
                     arguments: 
                     [
                       latData,

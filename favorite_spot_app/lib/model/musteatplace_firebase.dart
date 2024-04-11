@@ -20,7 +20,7 @@ class MustEatPlacesFirebase{
   String phone;
   double lat;
   double lng;
-  Uint8List image;// image 모양을 글자로 바꾸어 가져옴 
+  String image;// image 모양을 글자로 바꾸어 가져옴 
   String estimate;
   String initdate;
 
