@@ -17,6 +17,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
 import 'drawer/mydrawer.dart';
+import 'listview/myfavoritelist_firebase.dart';
 import 'listview/myfavoritlist.dart';
 import 'musteatplace/insert_place.dart';
 import 'tabbar/mytabbar.dart';
@@ -33,6 +34,9 @@ import 'tabbar/mytabbar.dart';
       3. 하단 탭바 설치 
     2024.04.07 Mon
       - 1. 현재위치 탐색 하여 인서트에 보내주는 기능 추가 
+
+    2024.04.11 Thu
+      - Firebase DB 사용 기능 추가 
   Detail      : - 
 
 */
@@ -125,11 +129,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           centerTitle: false,
-          // leading: IconButton(
-          //     onPressed: () {
-          //       // Drawer Contents
-          //     },
-          //     icon: Icon(Icons.menu)),
+
           actions: [
             IconButton(
                 onPressed: () {
@@ -142,7 +142,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       longData
                       ]);
                 },
-                icon: Icon(Icons.add_outlined))
+                icon: Icon(Icons.add_outlined)
+                ),
+                IconButton(
+                onPressed: () {
+                  // Add MustEatPlace
+                  Get.to(
+                    InsertMustEatPlace(), 
+                    arguments: 
+                    [
+                      latData,
+                      longData
+                      ]);
+                },
+                icon: Icon(Icons.add_box_rounded)
+                )
           ],
         ),
 
@@ -156,7 +170,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             child: MyFavoritList(),
           ),
           Center(
-            child: Center(),
+            child: MyFavoritList_firebase(),
           ),
           Center(
             child: Center(),

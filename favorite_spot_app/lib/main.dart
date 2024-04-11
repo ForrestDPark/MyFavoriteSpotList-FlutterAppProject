@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:keyboard_enter_app/firebase_options.dart';
 import 'view/home.dart';
 // import 'view/mydialog.dart';
 /*
@@ -17,7 +19,11 @@ import 'view/home.dart';
   Detail      : - 
 
 */
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
