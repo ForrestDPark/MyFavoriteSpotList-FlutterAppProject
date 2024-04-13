@@ -12,15 +12,13 @@ import 'dart:typed_data';
 
 */
 class MustEatPlacesFirebase{
-  // key ( auto increament )
-  int? seq; // 입력할때는  nUll  -> 불러올때는 키값
 
   //values
   String name;
   String phone;
   double lat;
   double lng;
-  String image;// image 모양을 글자로 바꾸어 가져옴 
+  Uint8List image;// image 모양을 글자로 바꾸어 가져옴 
   String estimate;
   String initdate;
 
